@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'escola',
+    'sisref.apps.SisrefConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,16 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 
 DATABASES = {
     'default': {
+    },
+    'auth_db': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': str(os.getenv('MYSQL_DATABASE')),
+        'USER': str(os.getenv('MYSQL_USER')),
+        'PASSWORD': str(os.getenv('MYSQL_PASSWORD')),
+        'HOST': str(os.getenv('DB_HOST', 'db')),  # Use 'db' as default from .env
+        'PORT': str(os.getenv('DB_PORT', '3306')),  # Use '3306' as default from .env
+    },
+    'sisref': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': str(os.getenv('MYSQL_DATABASE')),
         'USER': str(os.getenv('MYSQL_USER')),
@@ -125,3 +136,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DATABASE_ROUTERS = ['routers.db_routers.AuthRouter',
+                    'routers.db_routers.SisrefRouter'
+                    ]
